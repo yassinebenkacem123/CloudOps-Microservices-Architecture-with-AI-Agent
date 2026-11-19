@@ -1,3 +1,6 @@
+server:
+  port: 8888
+
 spring:
   application:
     name: configServer
@@ -7,13 +10,4 @@ spring:
     config:
       server:
         native:
-          search-locations: "file:C:\Users\PC\Desktop\YASSINE\web developement\CloudOps\cloudOps-configs"
-server:
-  port: 8888
-
-
-
-
-
-
-
+          search-locations: "file:///C:/Users/PC/Desktop/YASSINE/web%20developement/CloudOps/cloudOps-configs"

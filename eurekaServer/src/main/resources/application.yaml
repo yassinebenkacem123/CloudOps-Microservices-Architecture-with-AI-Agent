@@ -1,3 +1,7 @@
 spring:
   application:
     name: eurekaServer
+
+  config:
+    import: "configserver:http://localhost:8888"
+
