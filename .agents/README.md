@@ -1,0 +1,2 @@
+# Agent knowledge base
+Copy this directory and the root AGENTS.md into the repository root. Merge with existing instructions rather than overwriting them. Skills use YAML front matter and SKILL.md; discovery depends on the coding agent. AGENTS.md explicitly routes agents here even when automatic discovery is unavailable. Keep context/current-state.md synchronized with verified implementation. Rules are mandatory unless the user explicitly changes a design decision; skills and workflows explain how to apply them. Tests belong in service modules, not this folder.

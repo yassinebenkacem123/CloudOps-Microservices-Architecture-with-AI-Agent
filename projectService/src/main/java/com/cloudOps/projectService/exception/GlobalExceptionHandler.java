@@ -70,11 +70,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ){
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.CONFLICT,
                 ex.getMessage(),
                 LocalDateTime.now()
         );
-        return  new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
+        return  new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
     }
 
 }
