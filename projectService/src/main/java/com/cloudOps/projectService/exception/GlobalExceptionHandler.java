@@ -49,9 +49,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = {ProjectNofFoundException.class})
+    @ExceptionHandler(value = {ProjectNotFoundException.class})
     public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(
-            ProjectNofFoundException ex,
+            ProjectNotFoundException ex,
             WebRequest webRequest
     ){
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
@@ -76,6 +76,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return  new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
-
 
 }
