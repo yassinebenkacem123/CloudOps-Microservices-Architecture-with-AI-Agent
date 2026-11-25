@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1eaece2-7bb8-4c54-ba08-b01e16b4329d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/projectService/src/main/java/com/cloudOps/projectService/models/SourceRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projectService/src/main/java/com/cloudOps/projectService/models/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/projectService/src/main/java/com/cloudOps/projectService/models/Project.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectService/src/main/java/com/cloudOps/projectService/constant/EnvironmentType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectService/src/main/java/com/cloudOps/projectService/models/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +21,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -124,7 +125,7 @@
       <workItem from="1795298982103" duration="1258000" />
       <workItem from="1795386685980" duration="97000" />
       <workItem from="1795471898127" duration="30000" />
-      <workItem from="1795635343811" duration="5406000" />
+      <workItem from="1795635343811" duration="6072000" />
     </task>
     <servers />
   </component>
