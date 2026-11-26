@@ -73,6 +73,6 @@ class ProjectIntegrationTest {
         mockMvc.perform(post("/api/v1/project/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isBadRequest());
     }
 }

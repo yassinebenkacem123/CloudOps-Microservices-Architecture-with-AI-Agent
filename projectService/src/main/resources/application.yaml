@@ -2,8 +2,6 @@ spring:
   application:
     name: projectService
     
-  config:
-    import: "configserver:http://localhost:8888"
   datasource:
     password: root
     username: root
