@@ -1,12 +1,17 @@
 package com.cloudOps.projectService.services;
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface IProjectService {
-    ProjectResponse createProject(CreateProjectRequest request, String createdBy);
+    ProjectResponse createProject(ProjectDTO request, String createdBy);
 
-    ProjectResponse getProjectById(java.util.UUID projectId);
+    ProjectResponse getProjectById(UUID projectId);
 
-    java.util.List<ProjectResponse> getProjectsByOrganization(java.util.UUID organizationId);
+    List<ProjectResponse> getProjectsByOrganization(UUID organizationId);
+
+    ProjectResponse updateProject(UUID projectId, ProjectDTO request);
 }

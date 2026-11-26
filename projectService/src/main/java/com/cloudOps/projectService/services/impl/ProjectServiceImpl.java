@@ -1,6 +1,6 @@
 package com.cloudOps.projectService.services.impl;
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 import com.cloudOps.projectService.exception.ProjectAlreadyExistsException;
 import com.cloudOps.projectService.exception.ProjectNotFoundException;
@@ -25,7 +25,7 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     @Transactional
-    public ProjectResponse createProject(CreateProjectRequest request, String createdBy) {
+    public ProjectResponse createProject(ProjectDTO request, String createdBy) {
         if (projectRepo.existsByOrganizationIdAndSlug(request.getOrganizationId(), request.getSlug())) {
             throw new ProjectAlreadyExistsException(
                     "Project with slug " + request.getSlug() + " already exists in organization " + request.getOrganizationId()
@@ -54,5 +54,25 @@ public class ProjectServiceImpl implements IProjectService {
         return projectRepo.findAllByOrganizationId(organizationId).stream()
                 .map(projectMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public ProjectResponse updateProject(UUID projectId, ProjectDTO request) {
+        Project existingProject = projectRepo.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project", "id", projectId.toString()));
+
+        // Check if slug is being changed and if new slug already exists in organization
+        if (!existingProject.getSlug().equals(request.getSlug()) || !existingProject.getOrganizationId().equals(request.getOrganizationId())) {
+            if (projectRepo.existsByOrganizationIdAndSlug(request.getOrganizationId(), request.getSlug())) {
+                throw new ProjectAlreadyExistsException(
+                        "Project with slug " + request.getSlug() + " already exists in organization " + request.getOrganizationId()
+                );
+            }
+        }
+
+        projectMapper.updateEntityFromDto(request, existingProject);
+        Project updatedProject = projectRepo.save(existingProject);
+        return projectMapper.toResponse(updatedProject);
     }
 }

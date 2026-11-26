@@ -1,9 +1,8 @@
 package com.cloudOps.projectService.controller;
 
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
-import com.cloudOps.projectService.models.Project;
 import com.cloudOps.projectService.services.IProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class ProjectController {
     // create project
     @PostMapping("/create")
     public ResponseEntity<ProjectResponse> createProject(
-            @Valid @RequestBody CreateProjectRequest request
+            @Valid @RequestBody ProjectDTO request
     ){
         String createdBy = "dev-user"; // i will change it when keycloak is integrated
 
@@ -67,5 +66,13 @@ public class ProjectController {
     };
 
 
-
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ProjectResponse> updateProject(
+            @PathVariable("id") UUID projectId,
+            @Valid @RequestBody ProjectDTO request
+    ){
+        return ResponseEntity.ok(
+                projectService.updateProject(projectId, request)
+        );
+    }
 }

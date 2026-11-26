@@ -1,6 +1,6 @@
 package com.cloudOps.projectService;
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.repository.ProjectRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ class ProjectIntegrationTest {
     @Test
     void shouldCreateProjectSuccessfully() throws Exception {
         UUID orgId = UUID.randomUUID();
-        CreateProjectRequest request = new CreateProjectRequest();
+        ProjectDTO request = new ProjectDTO();
         request.setName("Integration Project");
         request.setSlug("int-project");
         request.setOrganizationId(orgId);
@@ -59,7 +59,7 @@ class ProjectIntegrationTest {
     @Test
     void shouldReturnConflictWhenProjectAlreadyExists() throws Exception {
         UUID orgId = UUID.randomUUID();
-        CreateProjectRequest request = new CreateProjectRequest();
+        ProjectDTO request = new ProjectDTO();
         request.setName("Existing Project");
         request.setSlug("existing-project");
         request.setOrganizationId(orgId);
@@ -81,12 +81,12 @@ class ProjectIntegrationTest {
     void shouldGetProjectsByOrganization() throws Exception {
         UUID orgId = UUID.randomUUID();
         
-        CreateProjectRequest p1 = new CreateProjectRequest();
+        ProjectDTO p1 = new ProjectDTO();
         p1.setName("Project 1");
         p1.setSlug("p1");
         p1.setOrganizationId(orgId);
 
-        CreateProjectRequest p2 = new CreateProjectRequest();
+        ProjectDTO p2 = new ProjectDTO();
         p2.setName("Project 2");
         p2.setSlug("p2");
         p2.setOrganizationId(orgId);

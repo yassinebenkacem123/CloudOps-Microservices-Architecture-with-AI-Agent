@@ -1,6 +1,6 @@
 package com.cloudOps.projectService.mappers;
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 import com.cloudOps.projectService.models.Project;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectMapper {
 
-    public Project toEntity(CreateProjectRequest request) {
+    public Project toEntity(ProjectDTO request) {
         if (request == null) return null;
         Project project = new Project();
         project.setName(request.getName());
@@ -16,6 +16,14 @@ public class ProjectMapper {
         project.setDescription(request.getDescription());
         project.setOrganizationId(request.getOrganizationId());
         return project;
+    }
+
+    public void updateEntityFromDto(ProjectDTO request, Project project) {
+        if (request == null || project == null) return;
+        project.setName(request.getName());
+        project.setSlug(request.getSlug());
+        project.setDescription(request.getDescription());
+        project.setOrganizationId(request.getOrganizationId());
     }
 
     public ProjectResponse toResponse(Project project) {

@@ -1,6 +1,6 @@
 package com.cloudOps.projectService.services.impl;
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 import com.cloudOps.projectService.exception.ProjectAlreadyExistsException;
 import com.cloudOps.projectService.mappers.ProjectMapper;
@@ -31,7 +31,7 @@ class ProjectServiceImplTest {
     @InjectMocks
     private ProjectServiceImpl projectService;
 
-    private CreateProjectRequest request;
+    private ProjectDTO request;
     private Project project;
     private ProjectResponse response;
     private UUID orgId;
@@ -39,7 +39,7 @@ class ProjectServiceImplTest {
     @BeforeEach
     void setUp() {
         orgId = UUID.randomUUID();
-        request = new CreateProjectRequest();
+        request = new ProjectDTO();
         request.setName("Test Project");
         request.setSlug("test-project");
         request.setOrganizationId(orgId);
@@ -118,5 +118,25 @@ class ProjectServiceImplTest {
         assertEquals(1, result.size());
         assertEquals(project.getProjectId(), result.get(0).getProjectId());
         verify(projectRepo).findAllByOrganizationId(orgId);
+    }
+
+    @Test
+    void updateProject_Success() {
+        UUID projectId = project.getProjectId();
+        ProjectDTO updateRequest = new ProjectDTO();
+        updateRequest.setName("Updated Name");
+        updateRequest.setSlug("updated-slug");
+        updateRequest.setOrganizationId(orgId);
+
+        when(projectRepo.findById(projectId)).thenReturn(java.util.Optional.of(project));
+        when(projectRepo.existsByOrganizationIdAndSlug(orgId, "updated-slug")).thenReturn(false);
+        when(projectRepo.save(any(Project.class))).thenReturn(project);
+        when(projectMapper.toResponse(any(Project.class))).thenReturn(response);
+
+        ProjectResponse result = projectService.updateProject(projectId, updateRequest);
+
+        assertNotNull(result);
+        verify(projectRepo).save(any(Project.class));
+        verify(projectMapper).updateEntityFromDto(eq(updateRequest), any(Project.class));
     }
 }

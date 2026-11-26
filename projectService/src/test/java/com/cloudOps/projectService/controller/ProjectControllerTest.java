@@ -1,6 +1,6 @@
 package com.cloudOps.projectService.controller;
 
-import com.cloudOps.projectService.dto.CreateProjectRequest;
+import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 import com.cloudOps.projectService.services.IProjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +39,7 @@ class ProjectControllerTest {
     void createProject_Success() throws Exception {
         UUID orgId = UUID.randomUUID();
         UUID projectId = UUID.randomUUID();
-        CreateProjectRequest request = new CreateProjectRequest();
+        ProjectDTO request = new ProjectDTO();
         request.setName("New Project");
         request.setSlug("new-project");
         request.setOrganizationId(orgId);
@@ -50,7 +50,7 @@ class ProjectControllerTest {
         response.setSlug("new-project");
         response.setOrganizationId(orgId);
 
-        when(projectService.createProject(any(CreateProjectRequest.class), eq("dev-user")))
+        when(projectService.createProject(any(ProjectDTO.class), eq("dev-user")))
                 .thenReturn(response);
 
         mockMvc.perform(post("/api/v1/project/create")
@@ -63,7 +63,7 @@ class ProjectControllerTest {
 
     @Test
     void createProject_InvalidRequest_ReturnsBadRequest() throws Exception {
-        CreateProjectRequest request = new CreateProjectRequest();
+        ProjectDTO request = new ProjectDTO();
         request.setName(""); // Invalid: Blank
         request.setSlug("Invalid Slug"); // Invalid: Pattern
 
@@ -88,5 +88,30 @@ class ProjectControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].name").value("Org Project"));
+    }
+
+    @Test
+    void updateProject_Success() throws Exception {
+        UUID orgId = UUID.randomUUID();
+        UUID projectId = UUID.randomUUID();
+        ProjectDTO request = new ProjectDTO();
+        request.setName("Updated Project");
+        request.setSlug("updated-project");
+        request.setOrganizationId(orgId);
+
+        ProjectResponse response = new ProjectResponse();
+        response.setProjectId(projectId);
+        response.setName("Updated Project");
+        response.setSlug("updated-project");
+        response.setOrganizationId(orgId);
+
+        when(projectService.updateProject(eq(projectId), any(ProjectDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/api/v1/project/update/" + projectId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Updated Project"));
     }
 }

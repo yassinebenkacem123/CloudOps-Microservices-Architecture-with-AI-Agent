@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,20 +15,19 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateProjectRequest {
+public class ProjectDTO {
     @NotBlank(message = "Project name is required")
     @Size(max = 100)
-    String name;
+    private String name;
 
     @NotBlank(message = "Project slug is required")
     @Pattern(regexp = "^[a-z0-9]+(-[a-z0-9]+)*$")
     @Size(max = 100)
-    String slug;
+    private String slug;
 
     @Size(max = 1000)
-    String description;
+    private String description;
 
     @NotNull(message = "Organization ID is required")
-    UUID organizationId;
-
+    private UUID organizationId;
 }
