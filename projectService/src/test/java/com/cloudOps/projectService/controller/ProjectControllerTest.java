@@ -17,9 +17,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = ProjectController.class, properties = "spring.cloud.config.enabled=false")
@@ -113,5 +112,17 @@ class ProjectControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Updated Project"));
+    }
+
+    @Test
+    void archiveProject_Success() throws Exception {
+        UUID projectId = UUID.randomUUID();
+
+        doNothing().when(projectService).archiveProject(projectId);
+
+        mockMvc.perform(delete("/api/v1/project/" + projectId))
+                .andExpect(status().isNoContent());
+
+        verify(projectService).archiveProject(projectId);
     }
 }

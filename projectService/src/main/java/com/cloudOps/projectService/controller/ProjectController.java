@@ -75,4 +75,12 @@ public class ProjectController {
                 projectService.updateProject(projectId, request)
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> archiveProject(
+            @PathVariable UUID id) {
+
+        projectService.archiveProject(id);
+        return ResponseEntity.noContent().build();
+    }
 }

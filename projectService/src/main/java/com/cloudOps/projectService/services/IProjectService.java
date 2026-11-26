@@ -14,4 +14,5 @@ public interface IProjectService {
     List<ProjectResponse> getProjectsByOrganization(UUID organizationId);
 
     ProjectResponse updateProject(UUID projectId, ProjectDTO request);
+    void archiveProject(UUID projectId);
 }

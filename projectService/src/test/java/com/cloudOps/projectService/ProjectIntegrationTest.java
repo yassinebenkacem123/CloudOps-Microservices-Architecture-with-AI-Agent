@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,5 +106,29 @@ class ProjectIntegrationTest {
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].organizationId").value(orgId.toString()))
                 .andExpect(jsonPath("$[1].organizationId").value(orgId.toString()));
+    }
+
+    @Test
+    void shouldArchiveProject() throws Exception {
+        UUID orgId = UUID.randomUUID();
+        ProjectDTO request = new ProjectDTO();
+        request.setName("To Archive");
+        request.setSlug("archive-me");
+        request.setOrganizationId(orgId);
+
+        String responseJson = mockMvc.perform(post("/api/v1/project/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        UUID projectId = UUID.fromString(objectMapper.readTree(responseJson).get("projectId").asText());
+
+        mockMvc.perform(delete("/api/v1/project/" + projectId))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(post("/api/v1/project/" + projectId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ARCHIVED"));
     }
 }

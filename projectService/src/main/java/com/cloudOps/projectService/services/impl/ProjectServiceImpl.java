@@ -1,5 +1,6 @@
 package com.cloudOps.projectService.services.impl;
 
+import com.cloudOps.projectService.constant.ProjectStatus;
 import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 import com.cloudOps.projectService.exception.ProjectAlreadyExistsException;
@@ -74,5 +75,14 @@ public class ProjectServiceImpl implements IProjectService {
         projectMapper.updateEntityFromDto(request, existingProject);
         Project updatedProject = projectRepo.save(existingProject);
         return projectMapper.toResponse(updatedProject);
+    }
+
+    @Override
+    @Transactional
+    public void archiveProject(UUID projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project", "id", projectId.toString()));
+        project.setProjectStatus(ProjectStatus.ARCHIVED);
+        projectRepo.save(project);
     }
 }

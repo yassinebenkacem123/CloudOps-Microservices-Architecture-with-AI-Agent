@@ -1,5 +1,6 @@
 package com.cloudOps.projectService.services.impl;
 
+import com.cloudOps.projectService.constant.ProjectStatus;
 import com.cloudOps.projectService.dto.ProjectDTO;
 import com.cloudOps.projectService.dto.ProjectResponse;
 import com.cloudOps.projectService.exception.ProjectAlreadyExistsException;
@@ -138,5 +139,27 @@ class ProjectServiceImplTest {
         assertNotNull(result);
         verify(projectRepo).save(any(Project.class));
         verify(projectMapper).updateEntityFromDto(eq(updateRequest), any(Project.class));
+    }
+
+    @Test
+    void archiveProject_Success() {
+        UUID projectId = project.getProjectId();
+        when(projectRepo.findById(projectId)).thenReturn(java.util.Optional.of(project));
+
+        projectService.archiveProject(projectId);
+
+        assertEquals(ProjectStatus.ARCHIVED, project.getProjectStatus());
+        verify(projectRepo).save(project);
+    }
+
+    @Test
+    void archiveProject_NotFound_ThrowsException() {
+        UUID projectId = UUID.randomUUID();
+        when(projectRepo.findById(projectId)).thenReturn(java.util.Optional.empty());
+
+        assertThrows(com.cloudOps.projectService.exception.ProjectNotFoundException.class, () -> {
+            projectService.archiveProject(projectId);
+        });
+        verify(projectRepo, never()).save(any(Project.class));
     }
 }
