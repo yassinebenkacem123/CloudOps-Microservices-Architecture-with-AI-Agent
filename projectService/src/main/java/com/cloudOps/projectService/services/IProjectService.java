@@ -8,4 +8,5 @@ public interface IProjectService {
 
     ProjectResponse getProjectById(java.util.UUID projectId);
 
+    java.util.List<ProjectResponse> getProjectsByOrganization(java.util.UUID organizationId);
 }

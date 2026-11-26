@@ -106,4 +106,17 @@ class ProjectServiceImplTest {
             projectService.getProjectById(projectId);
         });
     }
+
+    @Test
+    void getProjectsByOrganization_Success() {
+        when(projectRepo.findAllByOrganizationId(orgId)).thenReturn(java.util.List.of(project));
+        when(projectMapper.toResponse(project)).thenReturn(response);
+
+        java.util.List<ProjectResponse> result = projectService.getProjectsByOrganization(orgId);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(project.getProjectId(), result.get(0).getProjectId());
+        verify(projectRepo).findAllByOrganizationId(orgId);
+    }
 }

@@ -12,11 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,5 +71,22 @@ class ProjectControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getProjectsByOrganization_Success() throws Exception {
+        UUID orgId = UUID.randomUUID();
+        ProjectResponse response = new ProjectResponse();
+        response.setProjectId(UUID.randomUUID());
+        response.setName("Org Project");
+        response.setOrganizationId(orgId);
+
+        when(projectService.getProjectsByOrganization(orgId)).thenReturn(List.of(response));
+
+        mockMvc.perform(get("/api/v1/project")
+                        .param("organizationId", orgId.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Org Project"));
     }
 }

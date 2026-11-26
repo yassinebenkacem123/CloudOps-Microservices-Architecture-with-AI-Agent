@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 
@@ -44,5 +47,12 @@ public class ProjectServiceImpl implements IProjectService {
                         "Project", "id", projectId.toString()
                 ));
         return projectMapper.toResponse(project);
+    }
+
+    @Override
+    public List<ProjectResponse> getProjectsByOrganization(UUID organizationId) {
+        return projectRepo.findAllByOrganizationId(organizationId).stream()
+                .map(projectMapper::toResponse)
+                .toList();
     }
 }

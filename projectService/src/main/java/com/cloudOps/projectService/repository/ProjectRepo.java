@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface ProjectRepo extends JpaRepository<Project, UUID> {
     boolean existsByOrganizationIdAndSlug(UUID organizationId, String slug);
+    java.util.List<Project> findAllByOrganizationId(UUID organizationId);
 }
