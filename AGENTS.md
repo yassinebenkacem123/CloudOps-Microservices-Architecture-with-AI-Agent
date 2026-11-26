@@ -1,5 +1,5 @@
 # CloudOps engineering instructions
-Read `.agents/context/current-state.md`, `project-overview.md`, `architecture.md`, and `technology-stack.md` before changing code. Inspect actual source, build files and configuration; repository evidence overrides descriptive context. Read all applicable `.agents/rules/` and the relevant skill and workflow before implementation. Never treat future architecture as implemented.
+Read `.agents/context/current-state.md`, `project-overview.md`, `architecture.md`, and `technology-stack.md` before changing code. Inspect actual source, build files and configuration; repository evidence overrides descriptive context. Read all applicable `.agents/rules/` (including `ci-cd.md`) and the relevant skill (e.g., `github-actions`) and workflow before implementation. Never treat future architecture as implemented.
 
 ## Mandatory delivery contract
 - Make the smallest coherent change; preserve existing conventions and public contracts unless explicitly authorized.

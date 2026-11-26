@@ -1,7 +1,7 @@
 package com.cloudOps.projectService.exception;
 
 import com.cloudOps.projectService.dto.ErrorResponseDTO;
-import org.jspecify.annotations.Nullable;
+import org.springframework.lang.Nullable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -70,11 +70,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ){
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false),
-                HttpStatus.CONFLICT,
+                HttpStatus.BAD_REQUEST,
                 ex.getMessage(),
                 LocalDateTime.now()
         );
-        return  new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
+        return  new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
 
 }

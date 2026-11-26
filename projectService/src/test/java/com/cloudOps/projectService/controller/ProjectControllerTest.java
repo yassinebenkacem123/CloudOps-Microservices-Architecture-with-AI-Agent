@@ -7,8 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -19,13 +20,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProjectController.class)
+@WebMvcTest(controllers = ProjectController.class, properties = "spring.cloud.config.enabled=false")
+@ActiveProfiles("test")
 class ProjectControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
+    @MockBean
     private IProjectService projectService;
 
     @Autowired
@@ -35,11 +37,10 @@ class ProjectControllerTest {
     void createProject_Success() throws Exception {
         UUID orgId = UUID.randomUUID();
         UUID projectId = UUID.randomUUID();
-        CreateProjectRequest request = CreateProjectRequest.builder()
-                .name("New Project")
-                .slug("new-project")
-                .organizationId(orgId)
-                .build();
+        CreateProjectRequest request = new CreateProjectRequest();
+        request.setName("New Project");
+        request.setSlug("new-project");
+        request.setOrganizationId(orgId);
 
         ProjectResponse response = new ProjectResponse();
         response.setProjectId(projectId);
@@ -60,10 +61,9 @@ class ProjectControllerTest {
 
     @Test
     void createProject_InvalidRequest_ReturnsBadRequest() throws Exception {
-        CreateProjectRequest request = CreateProjectRequest.builder()
-                .name("") // Invalid: Blank
-                .slug("Invalid Slug") // Invalid: Pattern
-                .build();
+        CreateProjectRequest request = new CreateProjectRequest();
+        request.setName(""); // Invalid: Blank
+        request.setSlug("Invalid Slug"); // Invalid: Pattern
 
         mockMvc.perform(post("/api/v1/project/create")
                         .contentType(MediaType.APPLICATION_JSON)

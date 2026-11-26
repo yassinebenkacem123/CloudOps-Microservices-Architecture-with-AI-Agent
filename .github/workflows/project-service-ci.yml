@@ -1,0 +1,27 @@
+name: Project Service CI
+
+on:
+  push:
+    branches:
+      - main
+      - project-service
+    paths:
+      - 'projectService/**'
+      - '.github/workflows/project-service-ci.yml'
+      - '.github/workflows/reusable-java-ci.yml'
+      - 'cloudOps-configs/projectService.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'projectService/**'
+      - '.github/workflows/project-service-ci.yml'
+      - '.github/workflows/reusable-java-ci.yml'
+      - 'cloudOps-configs/projectService.yml'
+
+jobs:
+  call-java-ci:
+    uses: ./.github/workflows/reusable-java-ci.yml
+    with:
+      service_directory: "projectService"
+      java_version: "17"

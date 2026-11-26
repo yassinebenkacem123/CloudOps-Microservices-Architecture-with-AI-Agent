@@ -40,12 +40,11 @@ class ProjectIntegrationTest {
     @Test
     void shouldCreateProjectSuccessfully() throws Exception {
         UUID orgId = UUID.randomUUID();
-        CreateProjectRequest request = CreateProjectRequest.builder()
-                .name("Integration Project")
-                .slug("int-project")
-                .organizationId(orgId)
-                .description("Integration Test Description")
-                .build();
+        CreateProjectRequest request = new CreateProjectRequest();
+        request.setName("Integration Project");
+        request.setSlug("int-project");
+        request.setOrganizationId(orgId);
+        request.setDescription("Integration Test Description");
 
         mockMvc.perform(post("/api/v1/project/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -59,11 +58,10 @@ class ProjectIntegrationTest {
     @Test
     void shouldReturnConflictWhenProjectAlreadyExists() throws Exception {
         UUID orgId = UUID.randomUUID();
-        CreateProjectRequest request = CreateProjectRequest.builder()
-                .name("Existing Project")
-                .slug("existing-project")
-                .organizationId(orgId)
-                .build();
+        CreateProjectRequest request = new CreateProjectRequest();
+        request.setName("Existing Project");
+        request.setSlug("existing-project");
+        request.setOrganizationId(orgId);
 
         // First creation
         mockMvc.perform(post("/api/v1/project/create")

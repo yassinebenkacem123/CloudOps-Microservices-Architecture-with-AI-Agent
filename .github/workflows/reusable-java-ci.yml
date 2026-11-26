@@ -1,0 +1,51 @@
+name: Reusable Java CI
+
+on:
+  workflow_call:
+    inputs:
+      service_directory:
+        required: true
+        type: string
+        description: "The directory of the service to build and test."
+      java_version:
+        required: false
+        type: string
+        default: "17"
+        description: "The JDK version to use."
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ inputs.java_version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Verify with Maven
+        run: |
+          cd "${{ inputs.service_directory }}"
+          if [ -f "./mvnw" ]; then
+            chmod +x ./mvnw
+            ./mvnw -B clean verify -Dspring.profiles.active=test
+          else
+            mvn -B clean verify -Dspring.profiles.active=test
+          fi
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ inputs.service_directory }}
+          path: |
+            ${{ inputs.service_directory }}/target/surefire-reports/
+            ${{ inputs.service_directory }}/target/failsafe-reports/
+          retention-days: 5

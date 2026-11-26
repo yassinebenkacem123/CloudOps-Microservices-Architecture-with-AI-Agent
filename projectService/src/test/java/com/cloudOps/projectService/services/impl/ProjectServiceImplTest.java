@@ -39,12 +39,11 @@ class ProjectServiceImplTest {
     @BeforeEach
     void setUp() {
         orgId = UUID.randomUUID();
-        request = CreateProjectRequest.builder()
-                .name("Test Project")
-                .slug("test-project")
-                .organizationId(orgId)
-                .description("Description")
-                .build();
+        request = new CreateProjectRequest();
+        request.setName("Test Project");
+        request.setSlug("test-project");
+        request.setOrganizationId(orgId);
+        request.setDescription("Description");
 
         project = new Project();
         project.setProjectId(UUID.randomUUID());
@@ -83,5 +82,28 @@ class ProjectServiceImplTest {
         });
 
         verify(projectRepo, never()).save(any(Project.class));
+    }
+
+    @Test
+    void getProjectById_Success() {
+        UUID projectId = project.getProjectId();
+        when(projectRepo.findById(projectId)).thenReturn(java.util.Optional.of(project));
+        when(projectMapper.toResponse(project)).thenReturn(response);
+
+        ProjectResponse result = projectService.getProjectById(projectId);
+
+        assertNotNull(result);
+        assertEquals(projectId, result.getProjectId());
+        verify(projectRepo).findById(projectId);
+    }
+
+    @Test
+    void getProjectById_NotFound_ThrowsException() {
+        UUID projectId = UUID.randomUUID();
+        when(projectRepo.findById(projectId)).thenReturn(java.util.Optional.empty());
+
+        assertThrows(com.cloudOps.projectService.exception.ProjectNotFoundException.class, () -> {
+            projectService.getProjectById(projectId);
+        });
     }
 }
